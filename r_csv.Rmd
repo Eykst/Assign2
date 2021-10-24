@@ -1,0 +1,58 @@
+---
+title: "README"
+author: "skye"
+date: "10/23/2021"
+editor_options: 
+  chunk_output_type: inline
+---
+
+## R Markdown
+
+Install rvest
+
+```{r}
+install.packages("rvest")
+```
+
+open up r vest library
+
+```{r}
+library(rvest)
+```
+
+Getting info from link and piping it into different variables
+
+```{r}
+link = "https://en.wikipedia.org/wiki/Comma-separated_values"
+page = read_html(link)
+year = page %>% html_nodes(".wikitable td:nth-child(1)") %>% html_text()
+name = page %>% html_nodes(".wikitable td:nth-child(2)") %>% html_text()
+model = page %>% html_nodes("td:nth-child(3)") %>% html_text()
+description = page %>% html_nodes("td:nth-child(4)") %>% html_text()
+price = page %>% html_nodes("td:nth-child(5)") %>% html_text()
+```
+
+Extracting the car information from each data set and creating different rows for differnt cars
+
+```{r}
+firstcar <- c(year[1],name[1],model[1],description[1],price[1])
+secondcar <- c(year[2],name[2],model[2],description[2],price[2])
+thirdcar <- c(year[3],name[3],model[3],description[3],price[3])
+fourthcar <- c(year[4],name[4],model[4],description[4],price[4])
+```
+
+Creating a vector
+
+```{r}
+head <- c("Year", "Car", "Model", "Description", "Price")
+cars_combined <- matrix(c(firstcar, secondcar, thirdcar, fourthcar), byrow = TRUE, 
+nrow = 4)
+colnames(cars_combined) <- head
+cars_combined
+```
+
+Converting the matrix into a csv file
+
+```{r}
+write.csv(cars_combined, file="cars_combined.csv")
+```
